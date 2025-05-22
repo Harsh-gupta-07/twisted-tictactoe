@@ -1,8 +1,12 @@
+import { useWindowSize } from "react-use";
 import React from "react";
+import Confetti from "react-confetti";
 
 const WinModal = ({ visible }) => {
+  const { width, height } = useWindowSize();
   return (
     <dialog id="winModal" className="modal modal-open flex justify-center">
+      <Confetti width={width} height={height} />
       <button
         className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
         onClick={visible}
@@ -25,7 +29,6 @@ const WinModal = ({ visible }) => {
           </button>
         </div>
       </div>
-      ;
     </dialog>
   );
 };

@@ -105,7 +105,7 @@ function App() {
 
           <div className="text-center">
             <button
-              onClick={() => setShowGameRule(!showGameRule)}
+              onClick={() => setShowWin(!showWin)}
               className="cursor-pointer select-none text-[#6366F1] hover:text-[#EC4899] font-semibold text-sm underline transition-colors duration-150"
             >
               Show Game Rules
