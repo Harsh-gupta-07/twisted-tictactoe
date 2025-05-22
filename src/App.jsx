@@ -1,46 +1,27 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import "./App.css";
+import CreateCustomCategory from "./components/CreateCustomCategory";
 
-const CreateCustomCategory = ({ visible, handle }) => {
-  return (
-    <dialog
-      id="customCategory"
-      className="modal modal-open"
-      onClick={visible}
-    >
-      <div
-        className="modal-box bg-white max-w-md w-full sm:w-11/12"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-          onClick={visible}
-        >
-          ✕
-        </button>
-        <h3 className="font-bold text-lg mb-4">Add Custom Category</h3>
 
-        <div className="modal-action">
-          <button className="btn" onClick={visible}>
-            Cancel
-          </button>
-          <button className="btn btn-primary" onClick={handle}>
-            Create Category
-          </button>
-        </div>
-      </div>
-    </dialog>
-  );
-};
 
 function App() {
   const [categories, setCategories] = useState([
-    { title: "Animals", emojiList: ["🐶", "🐱", "🐰", "🐐"] },
+    {
+      title: "Animals",
+      emojiList: ["🐶", "🐱", "🐰", "🐐"],
+    },
     { title: "Food", emojiList: ["🍕", "🍔", "🍩", "🍟"] },
     { title: "Sports", emojiList: ["🏈", "⚽️", "🎾", "🏀"] },
     { title: "Tarvel", emojiList: ["✈️", "🚗", "🚢", "🏝️"] },
   ]);
-  const [showModal, setShowModal] = useState(false)
+
+  function addCategory(item) {
+    // console.log(item);
+
+    setCategories([...categories, item]);
+  }
+
+  const [showModal, setShowModal] = useState(false);
   return (
     <>
       <div className="bg-slate-100 min-h-screen text-slate-800">
@@ -75,10 +56,10 @@ function App() {
                           <span className="text-lg font-semibold mb-2">
                             {val.title}
                           </span>
-                          <div className="flex gap-1 text-2xl">
-                            {val.emojiList.map((emoji) => {
-                              return <span>{emoji}</span>;
-                            })}
+                          <div className="flex flex-wrap gap-1 text-2xl">
+                            {val.emojiList.map((emoji, idx) => (
+                              <span key={idx}>{emoji}</span>
+                            ))}
                           </div>
                         </button>
                       );
@@ -90,7 +71,10 @@ function App() {
                     </p>
                   </div>
                   <div className="mt-4">
-                    <button onClick={()=>setShowModal(!showModal)} className="text-[#3B82F6] cursor-pointer text-sm font-medium underline">
+                    <button
+                      onClick={() => setShowModal(!showModal)}
+                      className="text-[#3B82F6] cursor-pointer text-sm font-medium underline"
+                    >
                       Create your own emoji set!
                     </button>
                   </div>
@@ -102,14 +86,14 @@ function App() {
                   <div className="grid grid-cols-2 gap-4">
                     {categories.map((val) => {
                       return (
-                        <button className="cursor-pointer category-card bg-blue-50 hover:bg-blue-100 border-transparent hover:border-[#3B82F6] rounded-lg p-4 flex flex-col items-center justify-center border-2 transition-all">
+                        <button className="cursor-pointer category-card bg-red-50 hover:bg-red-100 border-transparent hover:border-[#f63b3b] rounded-lg p-4 flex flex-col items-center justify-center border-2 transition-all">
                           <span className="text-lg font-semibold mb-2">
                             {val.title}
                           </span>
-                          <div className="flex gap-1 text-2xl">
-                            {val.emojiList.map((emoji) => {
-                              return <span>{emoji}</span>;
-                            })}
+                          <div className="flex flex-wrap gap-1 text-2xl">
+                            {val.emojiList.map((emoji, idx) => (
+                              <span key={idx}>{emoji}</span>
+                            ))}
                           </div>
                         </button>
                       );
@@ -121,7 +105,10 @@ function App() {
                     </p>
                   </div>
                   <div className="mt-4">
-                    <button onClick={()=>setShowModal(!showModal)} className="text-[#F97316] cursor-pointer text-sm font-medium underline">
+                    <button
+                      onClick={() => setShowModal(!showModal)}
+                      className="text-[#F97316] cursor-pointer text-sm font-medium underline"
+                    >
                       Create your own emoji set!
                     </button>
                   </div>
@@ -143,7 +130,15 @@ function App() {
             </div>
           </div>
         </div>
-        {showModal && <CreateCustomCategory visible={()=>setShowModal(!showModal)}/>}
+        {showModal && (
+          <CreateCustomCategory
+            visible={() => setShowModal(!showModal)}
+            catList={categories.map((val) => val.title)}
+            initAddCat={(e) => {
+              addCategory(e);
+            }}
+          />
+        )}
       </div>
     </>
   );
