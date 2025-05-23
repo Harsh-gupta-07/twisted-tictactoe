@@ -7,10 +7,10 @@ const CreateCustomCategory = ({ visible, catList, initAddCat }) => {
   const [catInputErr, setCatInputErr] = useState(false);
   const [catExistErr, setCatExistErr] = useState(false);
   const [numOfEmoErr, setNumOfEmoErr] = useState(false);
+  
   function addEmo() {
     const emo = emoInput.current.value.trim();
-    const emojiRegex =
-      /^(\p{Emoji_Presentation}|\p{Extended_Pictographic}|\p{Emoji})\p{Emoji_Modifier}*$/u;
+    const emojiRegex = /^(\p{Emoji_Presentation}|\p{Extended_Pictographic}|\p{Emoji})\p{Emoji_Modifier}*$/u;
 
     if (emo && [...emo].length === 1 && emojiRegex.test(emo)) {
       setEmoList([...emoList, emo]);
@@ -86,7 +86,7 @@ const CreateCustomCategory = ({ visible, catList, initAddCat }) => {
             <input
               type="text"
               placeholder="Enter Category Name"
-              className="input input-bordered w-full border border-gray-800 focus:outline-none bg-white"
+              className="w-full border placeholder:text-sm border-gray-800 focus:outline-none bg-white rounded-md px-3 py-2 placeholder:text-gray-500 disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-slate-100"
               ref={catName}
             />
             {catInputErr && (
@@ -114,9 +114,7 @@ const CreateCustomCategory = ({ visible, catList, initAddCat }) => {
                     ? "Max amount of emoji's reached"
                     : "Add Emoji then press add"
                 }
-                className={`${
-                  emoList.length === 10 ? "placeholder:text-black" : ""
-                }  disabled:cursor-not-allowed disabled:bg-[#a4a4a4] input input-bordered w-full border border-gray-800 focus:outline-none bg-white`}
+                className="w-full border border-gray-800 focus:outline-none bg-white rounded-md px-3 py-2 placeholder:text-gray-500 placeholder:text-sm disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-slate-100"
                 ref={emoInput}
                 disabled={emoList.length === 10}
                 onKeyDown={(e) => {
@@ -131,10 +129,8 @@ const CreateCustomCategory = ({ visible, catList, initAddCat }) => {
                 Add
               </button>
             </div>
-            {emoInputErr ? (
-              <p className="text-xs text-red-600 py-1">
-                Enter exactly one emoji
-              </p>
+            {emoList.length===10 ? <p className="text-xs text-red-600 py-1">Max Number of Emoji Reached.</p> :emoInputErr ? (
+              <p className="text-xs text-red-600 py-1">Enter a Valid Emoji.</p>
             ) : (
               <p className="text-xs text-gray-600 py-1">
                 Depending on your system some emoji may be invalid.
