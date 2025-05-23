@@ -82,7 +82,6 @@ const GameBoard = ({ player1Cat, player2Cat, reset,changeCat, score, incScore })
           newGrid[i] = randomPlayer2Emoji();
           checkWinner([...player2Moves.slice(1), i], 2);
           setPlayer2Moves([...player2Moves.slice(1), i]);
-          console.log(2,[...player2Moves.slice(1), i]);
 
         } else {
           newGrid[i] = randomPlayer2Emoji();

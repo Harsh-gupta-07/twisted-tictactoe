@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import Confetti from "react-confetti";
 
 const WinModal = ({ visible, winner, reset, changeCat, score }) => {
-  console.log(score);
 
   const { width, height } = useWindowSize();
   useEffect(() => {
