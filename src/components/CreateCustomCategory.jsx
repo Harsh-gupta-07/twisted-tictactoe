@@ -7,12 +7,19 @@ const CreateCustomCategory = ({ visible, catList, initAddCat }) => {
   const [catInputErr, setCatInputErr] = useState(false);
   const [catExistErr, setCatExistErr] = useState(false);
   const [numOfEmoErr, setNumOfEmoErr] = useState(false);
-  
+  const [dupErr, setDupErr] = useState(false);
   function addEmo() {
     const emo = emoInput.current.value.trim();
-    const emojiRegex = /^(\p{Emoji_Presentation}|\p{Extended_Pictographic}|\p{Emoji})\p{Emoji_Modifier}*$/u;
+    const emojiRegex =
+      /^(\p{Emoji_Presentation}|\p{Extended_Pictographic}|\p{Emoji})\p{Emoji_Modifier}*$/u;
 
-    if (emo && [...emo].length === 1 && emojiRegex.test(emo)) {
+    if (emo && emojiRegex.test(emo)) {
+      if (emoList.includes(emo)){
+        setDupErr(true)
+        return
+      }else{
+        setDupErr(false)
+      }
       setEmoList([...emoList, emo]);
       setEmoInputErr(false);
     } else {
@@ -129,8 +136,14 @@ const CreateCustomCategory = ({ visible, catList, initAddCat }) => {
                 Add
               </button>
             </div>
-            {emoList.length===10 ? <p className="text-xs text-red-600 py-1">Max Number of Emoji Reached.</p> :emoInputErr ? (
-              <p className="text-xs text-red-600 py-1">Enter a Valid Emoji.</p>
+            {emoList.length === 10 ? (
+              <p className="text-xs text-red-600 py-1">
+                Max Number of Emoji Reached.
+              </p>
+            ) : emoInputErr ? (
+              <p className="text-xs text-red-600 py-1">
+                Enter a Single Valid Emoji.
+              </p>
             ) : (
               <p className="text-xs text-gray-600 py-1">
                 Depending on your system some emoji may be invalid.
@@ -164,7 +177,11 @@ const CreateCustomCategory = ({ visible, catList, initAddCat }) => {
                 ))}
               </div>
             )}
-
+            {dupErr && (
+              <p className="text-xs text-red-600 py-1">
+                Duplicates are not allowed.
+              </p>
+            )}
             {numOfEmoErr && (
               <p className="text-xs text-red-600 py-1">
                 Add atleast 3 and max 10 Emoji's.

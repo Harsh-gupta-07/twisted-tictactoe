@@ -11,11 +11,20 @@ function App() {
   const player1Cat = useRef([]);
   const player2Cat = useRef([]);
   const [resetCount, setResetCount] = useState(0);
+  const [score, setScore] = useState([0,0])
 
   function setEmoList(first, sec) {
     player1Cat.current = categories[first];
     player2Cat.current = categories[sec];
     setShowCategoryScreen(false);
+  }
+
+  function changeScore(player){
+    setScore((prev)=>{
+      let sc = prev
+      sc[player] +=1
+      return sc 
+    })
   }
 
   useEffect(() => {
@@ -26,6 +35,7 @@ function App() {
   }
 
   function changeCat(){  
+    setScore([0,0])
     setShowCategoryScreen(true)
   }
 
@@ -44,6 +54,8 @@ function App() {
           player2Cat={player2Cat.current}
           reset={reset}
           changeCat={changeCat}
+          score={score}
+          incScore={changeScore}
         />
       )}
     </>

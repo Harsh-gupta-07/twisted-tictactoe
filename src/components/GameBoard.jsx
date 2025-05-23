@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import WinModal from "./WinModal";
 
-const GameBoard = ({ player1Cat, player2Cat, reset,changeCat }) => {
+const GameBoard = ({ player1Cat, player2Cat, reset,changeCat, score, incScore }) => {
   const [showGameRule, setShowGameRule] = useState(false);
   const [player1, setPlayer1] = useState(true);
   const [grid, setGrid] = useState(["", "", "", "", "", "", "", "", ""]);
@@ -41,7 +41,7 @@ const GameBoard = ({ player1Cat, player2Cat, reset,changeCat }) => {
     );
 
     if (playerWin) {
-
+      incScore(num-1)
       setWinHighlight(playerMoves);
       setWinner(num);
       setShowWin(true);
@@ -62,7 +62,6 @@ const GameBoard = ({ player1Cat, player2Cat, reset,changeCat }) => {
           newGrid[i] = randomPlayer1Emoji();
           checkWinner([...player1Moves.slice(1), i], 1);
           setPlayer1Moves([...player1Moves.slice(1), i]);
-          console.log(1,[...player1Moves.slice(1), i]);
           
         } else {
           newGrid[i] = randomPlayer1Emoji();
@@ -157,7 +156,7 @@ const GameBoard = ({ player1Cat, player2Cat, reset,changeCat }) => {
         </div>
       </div>
       {showWin && (
-        <WinModal winner={winner} visible={() => setShowWin(!showWin)} reset={reset} changeCat={changeCat} />
+        <WinModal winner={winner} visible={() => setShowWin(!showWin)} reset={reset} changeCat={changeCat} score={score}/>
       )}
       {showGameRule && (
         <div className="mt-4 w-2xl bg-white rounded-xl shadow-md p-6 text-left mb-10">

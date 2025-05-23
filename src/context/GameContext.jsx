@@ -10,7 +10,7 @@ const ContextWrapper = ({ children }) => {
       { title: "Animals", emojiList: ["🐶", "🐱", "🐰", "🐐"] },
       { title: "Food", emojiList: ["🍕", "🍔", "🍩", "🍟"] },
       { title: "Sports", emojiList: ["🏈", "⚽️", "🎾", "🏀"] },
-      { title: "Tarvel", emojiList: ["✈️", "🚗", "🚢", "🏝️"] },
+      { title: "Travel", emojiList: ["✈️", "🚗", "🚢", "🏝️"] },
     ];
   });
 
