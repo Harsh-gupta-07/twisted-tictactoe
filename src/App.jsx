@@ -1,158 +1,53 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState,useEffect } from "react";
 import "./App.css";
+import { GameContext } from "./context/GameContext";
+import GameBoard from "./components/GameBoard";
 import CategorySelection from "./components/CategorySelection";
-import WinModal from "./components/WinModal";
 
 function App() {
-  const [showGameRule, setShowGameRule] = useState(false);
-  const [player1, setPlayer1] = useState(true);
-  const [grid, setGrid] = useState(["", "", "", "", "", "", "", "", ""]);
-  const [player1Moves, setPlayer1Moves] = useState([]);
-  const [player2Moves, setPlayer2Moves] = useState([]);
-  const [showWin, setShowWin] = useState(false)
-  function move(i) {
-    if (player1Moves.includes(i) || player2Moves.includes(i)) {
-      return;
-    }
+  const { categories, addCategory } = useContext(GameContext);
+  
+  const [showCategoryScreen, setShowCategoryScreen] = useState(true);
+  const player1Cat = useRef([]);
+  const player2Cat = useRef([]);
+  const [resetCount, setResetCount] = useState(0);
 
-    if (player1) {
-      setGrid((prevGrid) => {
-        const newGrid = [...prevGrid];
+  function setEmoList(first, sec) {
+    player1Cat.current = categories[first];
+    player2Cat.current = categories[sec];
+    setShowCategoryScreen(false);
+  }
 
-        if (player1Moves.length === 3) {
-          newGrid[player1Moves[0]] = "";
-          newGrid[i] = "😀";
+  useEffect(() => {
+  }, [resetCount]);
 
-          setPlayer1Moves([...player1Moves.slice(1), i]);
-        } else {
-          newGrid[i] = "😀";
-          setPlayer1Moves([...player1Moves, i]);
-        }
+  function reset() {
+    setResetCount((prev) => prev + 1);
+  }
 
-        return newGrid;
-      });
-
-      setPlayer1(false);
-    } else {
-      setGrid((prevGrid) => {
-        const newGrid = [...prevGrid];
-
-        if (player2Moves.length === 3) {
-          newGrid[player2Moves[0]] = "";
-          newGrid[i] = "🤣";
-          setPlayer2Moves([...player2Moves.slice(1), i]);
-        } else {
-          newGrid[i] = "🤣";
-          setPlayer2Moves([...player2Moves, i]);
-        }
-
-        return newGrid;
-      });
-
-      setPlayer1(true);
-    }
+  function changeCat(){  
+    setShowCategoryScreen(true)
   }
 
   return (
     <>
-      <div
-        className={`${
-          player1 ? "bg-blue-100" : "bg-red-100"
-        } min-h-screen text-slate-800 flex flex-col justify-center items-center`}
-      >
-        <div className="flex flex-col justify-center items-center container mx-auto px-4 pt-8 pb-5 max-w-4xl">
-          <div
-            className={`w-sm flex gap-4 mb-6 rounded-xl p-4 text-center bg-white border-2 ${
-              player1 ? "border-[#3B82F6]" : "border-[#f63b3b]"
-            } justify-center items-center`}
-          >
-            <p
-              className={`text-2xl font-medium  ${
-                player1 ? "text-[#3B82F6]" : "text-[#f63b3b]"
-              }`}
-            >
-              {player1 ? "Player 1's Turn" : "Player 2's Turn"}
-            </p>
-            <div className="mt-2 flex items-center">
-              <span
-                className={`text-sm  ${
-                  player1 ? "bg-blue-100" : "bg-red-100"
-                } ${
-                  player1 ? "text-blue-800" : "text-red-800"
-                } py-1 px-3 rounded-full mr-2`}
-              >
-                Animals
-              </span>
-            </div>
-          </div>
-          <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 lg:p-6 mb-6 w-sm ">
-            <div className="grid grid-cols-3 gap-4">
-              {grid.map((val, ind) => {
-                return (
-                  <div
-                    key={ind}
-                    onClick={() => {
-                      move(ind);
-                    }}
-                    className="select-none aspect-square rounded-lg bg-slate-100 flex items-center justify-center text-5xl md:text-6xl cursor-pointer hover:bg-white transition-all border-2 border-slate-200 hover:scale-105 duration-200 ease-in-out"
-                  >
-                    {val}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="text-center">
-            <button
-              onClick={() => setShowWin(!showWin)}
-              className="cursor-pointer select-none text-[#6366F1] hover:text-[#EC4899] font-semibold text-sm underline transition-colors duration-150"
-            >
-              Show Game Rules
-            </button>
-          </div>
-        </div>
-        {showWin && <WinModal visible={()=>setShowWin(!showWin)}/>}
-        {showGameRule && (
-          <div className="mt-4 w-2xl bg-white rounded-xl shadow-md p-6 text-left mb-10">
-            <h3 className="text-xl font-bold mb-3">Game Rules</h3>
-            <ul className="space-y-2 text-slate-700">
-              <li className="flex items-start">
-                <span className="text-[#6366F1] mr-2">•</span>
-                <span>Play on a 3x3 grid with your category of emojis</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-[#6366F1] mr-2">•</span>
-                <span>
-                  Each player can have a maximum of 3 emojis on the board
-                </span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-[#6366F1] mr-2">•</span>
-                <span>
-                  When placing a 4th emoji, your oldest emoji vanishes (FIFO)
-                </span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-[#6366F1] mr-2">•</span>
-                <span>
-                  You cannot place your 4th emoji where your 1st emoji was
-                </span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-[#6366F1] mr-2">•</span>
-                <span>
-                  Win by forming a line of 3 of your emojis (horizontal,
-                  vertical, or diagonal)
-                </span>
-              </li>
-            </ul>
-          </div>
-        )}
-      </div>
+      {showCategoryScreen ? (
+        <CategorySelection
+          categories={categories}
+          addCategories={addCategory}
+          setEmoList={setEmoList}
+        />
+      ) : (
+        <GameBoard
+          key={resetCount}
+          player1Cat={player1Cat.current}
+          player2Cat={player2Cat.current}
+          reset={reset}
+          changeCat={changeCat}
+        />
+      )}
     </>
   );
 }
 
 export default App;
-
